@@ -5,9 +5,9 @@ name: Doc Link Checker
 
 on:
   push:
-    branches: [ main ]
+    branches: [ zuoche-test ]
   pull_request:
-    branches: [ main ]
+    branches: [ zuoche-test ]
 
 jobs:
   linkchecker:
