@@ -82,6 +82,8 @@ export const configSchema = schema.object({
   customHeaders: schema.recordOf(schema.string(), schema.string(), { defaultValue: {} }),
   shardTimeout: schema.duration({ defaultValue: '30s' }),
   requestTimeout: schema.duration({ defaultValue: '30s' }),
+  responseMaxHeapPercentage: schema.number({ defaultValue: 1.0 }),
+  memoryCircuitBreakerEnabled: schema.boolean({ defaultValue: false }),
   pingTimeout: schema.duration({ defaultValue: schema.siblingRef('requestTimeout') }),
   logQueries: schema.boolean({ defaultValue: false }),
   optimizedHealthcheckId: schema.maybe(schema.string()),
@@ -146,6 +148,11 @@ const deprecations: ConfigDeprecationProvider = ({ renameFromRoot }) => [
   renameFromRoot('elasticsearch.customHeaders', 'opensearch.customHeaders'),
   renameFromRoot('elasticsearch.shardTimeout', 'opensearch.shardTimeout'),
   renameFromRoot('elasticsearch.requestTimeout', 'opensearch.requestTimeout'),
+  renameFromRoot('elasticsearch.responseMaxHeapPercentage', 'opensearch.responseMaxHeapPercentage'),
+  renameFromRoot(
+    'elasticsearch.memoryCircuitBreakerEnabled',
+    'opensearch.memoryCircuitBreakerEnabled'
+  ),
   renameFromRoot('elasticsearch.pingTimeout', 'opensearch.pingTimeout'),
   renameFromRoot('elasticsearch.logQueries', 'opensearch.logQueries'),
   renameFromRoot('elasticsearch.optimizedHealthcheckId', 'opensearch.optimizedHealthcheckId'),
@@ -247,6 +254,15 @@ export class OpenSearchConfig {
   public readonly shardTimeout: Duration;
 
   /**
+   * The percentage to determine the threshold for maximum heap size for memory circuit breaker.
+   */
+  public readonly responseMaxHeapPercentage: number;
+  /**
+   * Specifies whether the client should protect large response that can't fit into memory.
+   */
+  public readonly memoryCircuitBreakerEnabled: boolean;
+
+  /**
    * Specifies whether the client should attempt to detect the rest of the cluster
    * when it is first instantiated.
    */
@@ -304,6 +320,8 @@ export class OpenSearchConfig {
       : [rawConfig.requestHeadersWhitelist];
     this.pingTimeout = rawConfig.pingTimeout;
     this.requestTimeout = rawConfig.requestTimeout;
+    this.responseMaxHeapPercentage = rawConfig.responseMaxHeapPercentage;
+    this.memoryCircuitBreakerEnabled = rawConfig.memoryCircuitBreakerEnabled;
     this.shardTimeout = rawConfig.shardTimeout;
     this.sniffOnStart = rawConfig.sniffOnStart;
     this.sniffOnConnectionFault = rawConfig.sniffOnConnectionFault;

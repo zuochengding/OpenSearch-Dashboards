@@ -32,6 +32,8 @@ opensearch_dashboards_vars=(
     opensearch.pingTimeout
     opensearch.requestHeadersWhitelist
     opensearch.requestTimeout
+    opensearch.responseMaxHeapPercentage
+    opensearch.memoryCircuitBreakerEnabled
     opensearch.shardTimeout
     opensearch.sniffInterval
     opensearch.sniffOnConnectionFault

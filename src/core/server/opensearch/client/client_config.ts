@@ -55,6 +55,10 @@ export type OpenSearchClientConfig = Pick<
   | 'username'
   | 'password'
 > & {
+  responseMaxHeapPercentage?:
+    | OpenSearchConfig['responseMaxHeapPercentage']
+    | ClientOptions['responseMaxHeapPercentage'];
+  memoryCircuitBreakerEnabled?: boolean;
   pingTimeout?: OpenSearchConfig['pingTimeout'] | ClientOptions['pingTimeout'];
   requestTimeout?: OpenSearchConfig['requestTimeout'] | ClientOptions['requestTimeout'];
   ssl?: Partial<OpenSearchConfig['ssl']>;
@@ -76,10 +80,18 @@ export function parseClientOptions(config: OpenSearchClientConfig, scoped: boole
       ...DEFAULT_HEADERS,
       ...config.customHeaders,
     },
+    responseMaxHeapPercentage: 1.0,
+    memoryCircuitBreakerEnabled: false,
   };
 
   if (config.pingTimeout != null) {
     clientOptions.pingTimeout = getDurationAsMs(config.pingTimeout);
+  }
+  if (config.memoryCircuitBreakerEnabled != null) {
+    clientOptions.memoryCircuitBreakerEnabled = config.memoryCircuitBreakerEnabled;
+  }
+  if (config.responseMaxHeapPercentage != null) {
+    clientOptions.responseMaxHeapPercentage = config.responseMaxHeapPercentage;
   }
   if (config.requestTimeout != null) {
     clientOptions.requestTimeout = getDurationAsMs(config.requestTimeout);

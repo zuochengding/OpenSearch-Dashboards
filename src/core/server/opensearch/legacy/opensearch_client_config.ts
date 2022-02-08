@@ -61,6 +61,8 @@ export type LegacyOpenSearchClientConfig = Pick<ConfigOptions, 'keepAlive' | 'lo
     | 'username'
     | 'password'
   > & {
+    // memoryCircuitBreakerEnabled?:boolean;
+    // responseMaxHeapPercentage?: OpenSearchConfig['responseMaxHeapPercentage'] | ConfigOptions['responseMaxHeapPercentage']
     pingTimeout?: OpenSearchConfig['pingTimeout'] | ConfigOptions['pingTimeout'];
     requestTimeout?: OpenSearchConfig['requestTimeout'] | ConfigOptions['requestTimeout'];
     sniffInterval?: OpenSearchConfig['sniffInterval'] | ConfigOptions['sniffInterval'];
@@ -125,6 +127,14 @@ export function parseOpenSearchClientConfig(
   if (config.requestTimeout != null) {
     opensearchClientConfig.requestTimeout = getDurationAsMs(config.requestTimeout);
   }
+
+  // if (config.memoryCircuitBreakerEnabled != null) {
+  //   opensearchClientConfig.memoryCircuitBreakerEnabled = config.memoryCircuitBreakerEnabled
+  // }
+
+  // if (config.responseMaxHeapPercentage != null) {
+  //   opensearchClientConfig.responseMaxHeapPercentage = config.responseMaxHeapPercentage
+  // }
 
   if (config.sniffInterval) {
     opensearchClientConfig.sniffInterval = getDurationAsMs(config.sniffInterval);
